@@ -1,26 +1,177 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #0b1020;
+  --panel: rgba(8, 16, 34, 0.75);
+  --text-main: #e6edf7;
+  --text-sub: #99a8c3;
+  --line: rgba(255, 255, 255, 0.12);
+  --accent: #7be7d8;
+  --accent-2: #ffcf75;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  min-height: 100%;
+  font-family: "Pretendard", "Noto Sans KR", "Segoe UI", sans-serif;
+  color: var(--text-main);
+  background: radial-gradient(1200px 800px at 20% 10%, #18294f, var(--bg));
+}
+
+.countdown-page {
+  position: relative;
+  min-height: 100vh;
+  padding: 48px 20px;
+  overflow: hidden;
+}
+
+.bg-orb {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 999px;
+  filter: blur(70px);
+  opacity: 0.45;
+  z-index: 0;
+}
+
+.orb-1 {
+  top: -80px;
+  left: -60px;
+  background: #35b5ff;
+}
+
+.orb-2 {
+  bottom: -90px;
+  right: -90px;
+  background: #73ffca;
+}
+
+.countdown-panel {
+  position: relative;
+  z-index: 1;
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  padding: 28px;
+  border-radius: 24px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(18px);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+
+.title {
+  margin: 10px 0 6px;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.18;
+}
+
+.subtitle {
+  margin: 0 0 24px;
+  color: var(--text-sub);
+}
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card-head h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.dday {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #072a24;
+  background: var(--accent);
+}
+
+.dday.done {
+  color: #3f2500;
+  background: var(--accent-2);
+}
+
+.date {
+  margin: 10px 0 14px;
+  color: var(--text-sub);
+  font-size: 14px;
+}
+
+.clock {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.clock div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  min-height: 74px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.clock strong {
+  font-size: clamp(22px, 3vw, 28px);
+  line-height: 1;
+}
+
+.clock span {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-sub);
+}
+
+@media (max-width: 640px) {
+  .countdown-page {
+    padding: 24px 14px;
+  }
+
+  .countdown-panel {
+    padding: 18px;
+  }
+
+  .clock div {
+    min-height: 64px;
+  }
 }
