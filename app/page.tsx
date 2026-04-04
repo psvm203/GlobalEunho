@@ -113,7 +113,7 @@ export default function Home() {
 
       <section className="countdown-panel">
         <p className="eyebrow">Military Milestones</p>
-        <h1 className="title">진급/전역 D-day 카운트다운</h1>
+        <h1 className="title">은호 군생활 계산기</h1>
 
         <ul className="grid">
           {rows.map((item) => (

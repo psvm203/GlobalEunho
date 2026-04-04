@@ -2,7 +2,7 @@
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "진급/전역 D-day",
+  title: "은호 군생활 계산기",
   description: "군 복무 주요 일정 카운트다운",
 };
 
