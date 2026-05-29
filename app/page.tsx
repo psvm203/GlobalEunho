@@ -19,6 +19,32 @@ type Countdown = {
   done: boolean;
 };
 
+const ENLISTMENT = "2026-03-23T00:00:00+09:00";
+const DISCHARGE_END = "2027-09-23T00:00:00+09:00"; // 2027-09-22 24:00 KST
+
+type Progress = {
+  percent: number;
+  clockHours: number;
+  clockMinutes: number;
+  clockSeconds: number;
+};
+
+function calculateProgress(now: number): Progress {
+  const start = new Date(ENLISTMENT).getTime();
+  const end = new Date(DISCHARGE_END).getTime();
+  const total = end - start;
+  const elapsed = Math.min(Math.max(now - start, 0), total);
+  const fraction = elapsed / total;
+
+  const clockTotalSeconds = fraction * 86400;
+  return {
+    percent: fraction * 100,
+    clockHours: Math.floor(clockTotalSeconds / 3600),
+    clockMinutes: Math.floor((clockTotalSeconds % 3600) / 60),
+    clockSeconds: Math.floor(clockTotalSeconds % 60),
+  };
+}
+
 const milestones: Milestone[] = [
   {
     id: "private-first-class",
@@ -91,13 +117,11 @@ function pad(value: number) {
 }
 
 export default function Home() {
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setNow(Date.now());
-    }, 1000);
-
+    setNow(Date.now());
+    const timer = setInterval(() => setNow(Date.now()), 100);
     return () => clearInterval(timer);
   }, []);
 
@@ -105,6 +129,8 @@ export default function Home() {
     () => milestones.map((item) => ({ ...item, countdown: calculateCountdown(item.date, now) })),
     [now],
   );
+
+  const progress = useMemo(() => calculateProgress(now), [now]);
 
   return (
     <main className="countdown-page">
@@ -114,6 +140,39 @@ export default function Home() {
       <section className="countdown-panel">
         <p className="eyebrow">Military Milestones</p>
         <h1 className="title">은호 군생활 계산기</h1>
+
+        <div className="service-progress">
+          <div className="service-progress-header">
+            <span className="service-progress-label">복무 진행률</span>
+            <span className="service-progress-percent">{progress.percent.toFixed(8)}%</span>
+          </div>
+          <div className="progress-bar-track">
+            <div
+              className="progress-bar-fill"
+              style={{ width: `${Math.min(progress.percent, 100)}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="discharge-clock-panel">
+          <p className="eyebrow">전역 시계</p>
+          <div className="discharge-clock">
+            <div className="discharge-clock-segment">
+              <strong>{pad(progress.clockHours)}</strong>
+              <span>시</span>
+            </div>
+            <div className="discharge-clock-colon">:</div>
+            <div className="discharge-clock-segment">
+              <strong>{pad(progress.clockMinutes)}</strong>
+              <span>분</span>
+            </div>
+            <div className="discharge-clock-colon">:</div>
+            <div className="discharge-clock-segment">
+              <strong>{pad(progress.clockSeconds)}</strong>
+              <span>초</span>
+            </div>
+          </div>
+        </div>
 
         <ul className="grid">
           {rows.map((item) => (
